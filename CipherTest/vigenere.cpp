@@ -68,10 +68,10 @@ void cipherText(char *key, char *plain, char *cipher, int key_len, int plain_len
 	{
 		if( j >= key_len )
 			j = 0;
-		char c = (plain[i] + key[j] - 'a');
+		int c = (plain[i] + key[j] - 'a');
 		if( c > 'z' )
 			c = c - 'z' - 1 + 'a';
-		cipher[i] = c;
+		cipher[i] = (char)c;
 	}
 
 	cipher[i] = NULL;
