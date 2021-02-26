@@ -32,15 +32,17 @@ int readData(char *path, char *data, bool padding)
 			for(; cnt < MAX_LEN; cnt++)
 				data[cnt] = 'x';
 
-			data[MAX_LEN] = NULL;
+			data[MAX_LEN] = 0;
 			return MAX_LEN;
 		}
 		else
 		{
-			data[cnt] = NULL;
+			data[cnt] = 0;
 			return cnt;
 		}
 	}
+
+	return 0;
 }
 
 void printData(char *data) 
@@ -49,7 +51,7 @@ void printData(char *data)
 	while(true)
 	{
 		char c = data[i];
-		if( c == NULL )
+		if( c == 0 )
 			break;
 
 		if( i > 0 && i % COL_NUM == 0 )
@@ -74,7 +76,7 @@ void cipherText(char *key, char *plain, char *cipher, int key_len, int plain_len
 		cipher[i] = (char)c;
 	}
 
-	cipher[i] = NULL;
+	cipher[i] = 0;
 }
 
 int main(int argc,char** argv)
