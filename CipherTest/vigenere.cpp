@@ -3,7 +3,7 @@
 #define MAX_LEN 512
 #define COL_NUM 80
 
-void readData(char *path, char *data, bool padding) 
+int readData(char *path, char *data, bool padding) 
 {
 	int cnt = 0;
 	char c = 0;
@@ -32,11 +32,13 @@ void readData(char *path, char *data, bool padding)
 			for(; cnt < MAX_LEN; cnt++)
 				data[cnt] = 'x';
 
-			data[MAX_LEN] = NULL;		
+			data[MAX_LEN] = NULL;
+			return MAX_LEN;
 		}
 		else
 		{
 			data[cnt] = NULL;
+			return cnt;
 		}
 	}
 }
@@ -59,6 +61,22 @@ void printData(char *data)
 	}
 }
 
+void cipherText(char *key, char *plain, char *cipher, int key_len, int plain_len)
+{
+	int i = 0, j = 0;
+	for(i = 0; i < plain_len; i++, j++)
+	{
+		if( j >= key_len )
+			j = 0;
+		char c = (plain[i] + key[j] - 'a');
+		if( c > 'z' )
+			c = c - 'z' - 1 + 'a';
+		cipher[i] = c;
+	}
+
+	cipher[i] = NULL;
+}
+
 int main(int argc,char** argv)
 {
 	if( argc < 3 )
@@ -69,26 +87,30 @@ int main(int argc,char** argv)
 
 	char key_data[MAX_LEN + 1];
 	char plain_data[MAX_LEN + 1];
+	char cipher_data[MAX_LEN + 1];
 
 	char *key = argv[1];
 	char *content = argv[2];
 
 	// read key file
-	readData(key, key_data, false);
+	int key_len = readData(key, key_data, false);
 
 	// read plain file
-	readData(content, plain_data, true);
+	int plain_len = readData(content, plain_data, true);
 		
 	// print key data
-	printf("\n\n\nVigenere Key:\n\n");
+	printf("\n\nVigenere Key:\n\n");
 	printData(key_data);
 
 	// print plain data
-
 	printf("\n\n\nPlaintext:\n\n");
 	printData(plain_data);
 
-
+	// print cipher data
+	cipherText(key_data, plain_data, cipher_data, key_len, plain_len);
+	printf("\n\n\nCiphertext:\n\n");
+	printData(cipher_data);
+	printf("\n");
 
 	return 0;
 }
